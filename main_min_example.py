@@ -11,7 +11,7 @@ import numpy as np
 import json
 import time
 import configparser
-
+import datetime
 import graph_ltpl
 
 """
@@ -44,7 +44,9 @@ track_specifier = json.loads(track_param.get('DRIVING_TASK', 'track'))
 path_dict = {'globtraj_input_path': toppath + "/inputs/traj_ltpl_cl/traj_ltpl_cl_" + track_specifier + ".csv",
              'graph_store_path': toppath + "/inputs/stored_graph.pckl",
              'ltpl_offline_param_path': toppath + "/params/ltpl_config_offline.ini",
-             'ltpl_online_param_path': toppath + "/params/ltpl_config_online.ini"
+             'ltpl_online_param_path': toppath + "/params/ltpl_config_online.ini",
+             'log_path': toppath + "/logs/graph_ltpl/",
+             'graph_log_id': datetime.datetime.now().strftime("%Y_%m_%d__%H_%M_%S")
              }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -54,7 +56,7 @@ path_dict = {'globtraj_input_path': toppath + "/inputs/traj_ltpl_cl/traj_ltpl_cl
 # intialize graph_ltpl-class
 ltpl_obj = graph_ltpl.Graph_LTPL.Graph_LTPL(path_dict=path_dict,
                                             visual_mode=True,
-                                            log_to_file=False)
+                                            log_to_file=True)
 
 # calculate offline graph
 ltpl_obj.graph_init()
@@ -76,7 +78,7 @@ ltpl_obj.set_startpos(pos_est=pos_est,
 
 traj_set = {'straight': None}
 tic = time.time()
-
+print("----------------start iteration---------------")
 while True:
     # -- SELECT ONE OF THE PROVIDED TRAJECTORIES -----------------------------------------------------------------------
     # (here: brute-force, replace by sophisticated behavior planner)
@@ -102,6 +104,15 @@ while True:
     # -- CALCULATE VELOCITY PROFILE AND RETRIEVE TRAJECTORIES ----------------------------------------------------------
     traj_set = ltpl_obj.calc_vel_profile(pos_est=pos_est,
                                          vel_est=vel_est)[0]
-
+    # print(traj_set.keys())
+    # print(len(traj_set["straight"][0]))
+    # print("v = {}".format(vel_est))
+    for i in range (0,len(traj_set["straight"][0])):
+        #s, x, y, heading, curvature, vx, ax]
+        tmp = traj_set["straight"][0][i]
+        print("i=",i)
+        print("\ts={:.2f},x={:.2f},y={:.2f},h={:.2f},c={:.2f},v={:.2f},a={:.2f}".format(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],tmp[5],tmp[6]))
+    # print(traj_set)
     # -- LIVE PLOT (if activated) --------------------------------------------------------------------------------------
     ltpl_obj.visual()
+    ltpl_obj.log()

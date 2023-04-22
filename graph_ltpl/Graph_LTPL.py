@@ -511,7 +511,7 @@ class Graph_LTPL(object):
             # highlight ego pos
             self.__graph_plot_handler.plot_vehicle(pos=self.__pos_est,
                                                    heading=next(iter(self.__action_set.values()))[0][0, 3],
-                                                   width=2.0,
+                                                   width=0.3,
                                                    length=self.__graph_base.veh_length,
                                                    zorder=100,
                                                    color_str='darkorange')
@@ -524,7 +524,7 @@ class Graph_LTPL(object):
                 self.__graph_plot_handler.highlight_pos(pos_coords=s_pos,
                                                         color_str='c',
                                                         zorder=5,
-                                                        radius=2,
+                                                        radius=1,
                                                         id_in='Start Node')
             except ValueError:
                 pass

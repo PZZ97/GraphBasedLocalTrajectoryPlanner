@@ -384,7 +384,7 @@ if __name__ == "__main__":
             raise ValueError("Could not find any logs in the specified folder! Please provide a file path argument.")
 
         # specific file
-        # file_path = os.path.expanduser(toppath + '/logs/2019_03_22/11_00_47_data.csv')
+        # file_path = os.path.expanduser(toppath + '/logs/graph_ltpl/2023_04_21/22_02_54_data.csv')
 
     # extract common file parent
     file_path = file_path[:file_path.rfind("_")]
